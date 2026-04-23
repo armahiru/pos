@@ -1,0 +1,14 @@
+# Environment variables — never commit this
+.env
+
+# Dependencies — too large, reinstalled with npm install
+node_modules/
+
+# Personal data
+backups/
+uploads/*
+!uploads/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db

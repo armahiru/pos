@@ -1,0 +1,35 @@
+{
+  "name": "pos-system",
+  "version": "1.0.0",
+  "description": "Point of Sale System - Web-based POS application",
+  "main": "backend/app.js",
+  "scripts": {
+    "start": "node backend/app.js",
+    "seed": "node backend/database/seed.js",
+    "test": "mocha --recursive tests/**/*.test.js --timeout 10000",
+    "test:watch": "mocha --recursive tests/**/*.test.js --timeout 10000 --watch"
+  },
+  "keywords": [
+    "pos",
+    "point-of-sale",
+    "retail"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "json2csv": "^5.0.7",
+    "mongoose": "^8.9.0",
+    "multer": "^2.1.1",
+    "paystack-node": "^0.3.0",
+    "pdfkit": "^0.16.0"
+  },
+  "devDependencies": {
+    "chai": "^4.5.0",
+    "fast-check": "^3.23.2",
+    "mocha": "^10.8.2"
+  }
+}
