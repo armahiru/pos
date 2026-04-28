@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>POS System</title>
+  <title>YGLC Shop</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="/js/chart.min.js"></script>
   <script src="/js/qrcode.min.js"></script>
   <script src="/js/jsbarcode.min.js"></script>
-  <script src="https://js.paystack.co/v1/inline.js"></script>
   <link rel="stylesheet" href="/css/styles.css" />
   <style>
     /* Offline fallback font */
@@ -24,8 +26,106 @@
 
   <!-- ===== LOGIN PAGE ===== -->
   <div id="login-page" class="login-container">
+
+    <!-- Left decorative panel -->
+    <div class="login-panel">
+      <div class="login-panel-content">
+        <div class="login-panel-logo">YG</div>
+        <h2 class="login-panel-title">YGLC Shop</h2>
+        <p class="login-panel-sub">Smart Point of Sale for modern businesses</p>
+
+        <!-- SVG Illustration -->
+        <svg class="login-illustration" viewBox="0 0 380 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Store shelf background -->
+          <rect x="20" y="60" width="340" height="180" rx="16" fill="white" fill-opacity="0.18"/>
+          <!-- Shelf lines -->
+          <rect x="40" y="130" width="300" height="6" rx="3" fill="white" fill-opacity="0.35"/>
+          <rect x="40" y="200" width="300" height="6" rx="3" fill="white" fill-opacity="0.35"/>
+          <!-- Product boxes row 1 -->
+          <rect x="55" y="90" width="44" height="38" rx="6" fill="white" fill-opacity="0.7"/>
+          <rect x="59" y="95" width="36" height="6" rx="2" fill="#15803d" fill-opacity="0.5"/>
+          <rect x="59" y="104" width="24" height="4" rx="2" fill="#15803d" fill-opacity="0.3"/>
+          <rect x="110" y="88" width="44" height="40" rx="6" fill="white" fill-opacity="0.6"/>
+          <rect x="114" y="93" width="36" height="6" rx="2" fill="#0284c7" fill-opacity="0.5"/>
+          <rect x="114" y="102" width="20" height="4" rx="2" fill="#0284c7" fill-opacity="0.3"/>
+          <rect x="165" y="92" width="44" height="36" rx="6" fill="white" fill-opacity="0.75"/>
+          <rect x="169" y="97" width="36" height="6" rx="2" fill="#b45309" fill-opacity="0.5"/>
+          <rect x="169" y="106" width="28" height="4" rx="2" fill="#b45309" fill-opacity="0.3"/>
+          <rect x="220" y="86" width="44" height="42" rx="6" fill="white" fill-opacity="0.65"/>
+          <rect x="224" y="91" width="36" height="6" rx="2" fill="#15803d" fill-opacity="0.5"/>
+          <rect x="224" y="100" width="22" height="4" rx="2" fill="#15803d" fill-opacity="0.3"/>
+          <rect x="275" y="90" width="44" height="38" rx="6" fill="white" fill-opacity="0.7"/>
+          <rect x="279" y="95" width="36" height="6" rx="2" fill="#b91c1c" fill-opacity="0.5"/>
+          <rect x="279" y="104" width="26" height="4" rx="2" fill="#b91c1c" fill-opacity="0.3"/>
+          <!-- Product boxes row 2 -->
+          <rect x="55" y="142" width="50" height="52" rx="6" fill="white" fill-opacity="0.65"/>
+          <rect x="60" y="148" width="40" height="8" rx="2" fill="#0284c7" fill-opacity="0.45"/>
+          <rect x="60" y="159" width="30" height="5" rx="2" fill="#0284c7" fill-opacity="0.25"/>
+          <rect x="118" y="145" width="44" height="48" rx="6" fill="white" fill-opacity="0.7"/>
+          <rect x="122" y="151" width="36" height="8" rx="2" fill="#15803d" fill-opacity="0.45"/>
+          <rect x="122" y="162" width="26" height="5" rx="2" fill="#15803d" fill-opacity="0.25"/>
+          <rect x="174" y="148" width="44" height="44" rx="6" fill="white" fill-opacity="0.6"/>
+          <rect x="178" y="154" width="36" height="8" rx="2" fill="#b45309" fill-opacity="0.45"/>
+          <rect x="178" y="165" width="22" height="5" rx="2" fill="#b45309" fill-opacity="0.25"/>
+          <rect x="230" y="142" width="50" height="52" rx="6" fill="white" fill-opacity="0.72"/>
+          <rect x="234" y="148" width="42" height="8" rx="2" fill="#b91c1c" fill-opacity="0.45"/>
+          <rect x="234" y="159" width="28" height="5" rx="2" fill="#b91c1c" fill-opacity="0.25"/>
+          <rect x="292" y="146" width="44" height="46" rx="6" fill="white" fill-opacity="0.65"/>
+          <rect x="296" y="152" width="36" height="8" rx="2" fill="#15803d" fill-opacity="0.45"/>
+          <rect x="296" y="163" width="24" height="5" rx="2" fill="#15803d" fill-opacity="0.25"/>
+          <!-- POS terminal -->
+          <rect x="130" y="215" width="120" height="16" rx="4" fill="white" fill-opacity="0.5"/>
+          <rect x="150" y="208" width="80" height="14" rx="4" fill="white" fill-opacity="0.65"/>
+          <rect x="162" y="200" width="56" height="12" rx="3" fill="white" fill-opacity="0.8"/>
+          <!-- Screen glow on terminal -->
+          <rect x="165" y="202" width="50" height="8" rx="2" fill="#15803d" fill-opacity="0.4"/>
+          <!-- Barcode lines on terminal screen -->
+          <rect x="168" y="203" width="2" height="6" rx="1" fill="white" fill-opacity="0.8"/>
+          <rect x="172" y="203" width="1" height="6" rx="1" fill="white" fill-opacity="0.8"/>
+          <rect x="175" y="203" width="3" height="6" rx="1" fill="white" fill-opacity="0.8"/>
+          <rect x="180" y="203" width="2" height="6" rx="1" fill="white" fill-opacity="0.8"/>
+          <rect x="184" y="203" width="1" height="6" rx="1" fill="white" fill-opacity="0.8"/>
+          <rect x="187" y="203" width="3" height="6" rx="1" fill="white" fill-opacity="0.8"/>
+          <rect x="192" y="203" width="2" height="6" rx="1" fill="white" fill-opacity="0.8"/>
+          <rect x="196" y="203" width="4" height="6" rx="1" fill="white" fill-opacity="0.8"/>
+          <rect x="202" y="203" width="2" height="6" rx="1" fill="white" fill-opacity="0.8"/>
+          <rect x="206" y="203" width="3" height="6" rx="1" fill="white" fill-opacity="0.8"/>
+          <!-- Shopping bag -->
+          <path d="M310 170 L320 170 L325 195 L305 195 Z" fill="white" fill-opacity="0.7"/>
+          <path d="M312 170 C312 165 318 165 318 170" stroke="white" stroke-width="2.5" stroke-opacity="0.9" fill="none"/>
+          <rect x="308" y="180" width="14" height="2" rx="1" fill="#15803d" fill-opacity="0.5"/>
+          <!-- Floating coins/currency -->
+          <circle cx="48" cy="175" r="10" fill="white" fill-opacity="0.5"/>
+          <text x="48" y="179" text-anchor="middle" font-size="9" fill="#15803d" font-weight="800" fill-opacity="0.8">₵</text>
+          <circle cx="340" cy="155" r="8" fill="white" fill-opacity="0.45"/>
+          <text x="340" y="159" text-anchor="middle" font-size="8" fill="#15803d" font-weight="800" fill-opacity="0.8">₵</text>
+          <!-- Stars/sparkles -->
+          <circle cx="80" cy="55" r="3" fill="white" fill-opacity="0.6"/>
+          <circle cx="300" cy="48" r="2" fill="white" fill-opacity="0.5"/>
+          <circle cx="350" cy="80" r="2.5" fill="white" fill-opacity="0.55"/>
+          <circle cx="30" cy="100" r="2" fill="white" fill-opacity="0.5"/>
+        </svg>
+
+        <div class="login-panel-features">
+          <div class="lpf-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Fast checkout & sales tracking
+          </div>
+          <div class="lpf-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Inventory & stock management
+          </div>
+          <div class="lpf-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Reports & business insights
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right form panel -->
     <div class="login-box">
-      <h1>POS System</h1>
+      <h1>YGLC <span>Shop</span></h1>
       <p class="login-subtitle">Sign in to your account</p>
       <form id="login-form">
         <div class="form-group">
@@ -39,15 +139,16 @@
         <p id="login-error" style="color:var(--danger);font-size:0.85rem;margin-bottom:0.5rem"></p>
         <button type="submit" class="btn btn-primary btn-block">Log In</button>
       </form>
-    </div>
-  </div>
+    </div><!-- /login-box -->
+  </div><!-- /login-container -->
 
   <!-- ===== APP SHELL ===== -->
   <div id="app" style="display:none">
     <!-- Top Bar -->
     <div class="topbar">
       <div class="topbar-left">
-        <h2>POS System</h2>
+        <div class="topbar-logo">YG</div>
+        <h2>YGLC <span>Shop</span></h2>
       </div>
       <div class="topbar-user">
         <span id="user-display"></span>
@@ -403,7 +504,6 @@
           <option value="Cash">Cash</option>
           <option value="MTN_MOMO">MTN Mobile Money</option>
           <option value="Card">Card</option>
-          <option value="Paystack">Paystack (Card / Mobile Money)</option>
         </select>
       </div>
       <div class="form-group" id="payment-amount-group">
@@ -413,11 +513,6 @@
       <div class="form-group" id="payment-ref-group" style="display:none">
         <label>Reference</label>
         <input type="text" id="payment-ref" placeholder="Transaction reference" />
-      </div>
-      <div class="form-group" id="paystack-email-group" style="display:none">
-        <label for="paystack-email">Customer Email</label>
-        <input type="email" id="paystack-email" placeholder="customer@email.com" />
-        <small style="color:var(--text-3);font-size:0.78rem">Required for Paystack. Use any email if customer has none.</small>
       </div>
       <div id="momo-qr-section" style="display:none;text-align:center;margin:1rem 0">
         <div id="momo-qr-code" style="display:inline-block"></div>

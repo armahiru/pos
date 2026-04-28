@@ -13,7 +13,6 @@ const Cashier = {
     this.loadProducts();
     this.renderCart();
     this.bindEvents();
-    this.checkPendingPaystackPayment();
   },
 
   async loadTaxRate() {
@@ -389,11 +388,9 @@ const Cashier = {
       const method = e.target.value;
       const refGroup = document.getElementById('payment-ref-group');
       const qrSection = document.getElementById('momo-qr-section');
-      const paystackEmailGroup = document.getElementById('paystack-email-group');
       const amountGroup = document.getElementById('payment-amount-group');
 
       qrSection.style.display = 'none';
-      paystackEmailGroup.style.display = 'none';
       refGroup.style.display = 'none';
       amountGroup.style.display = 'block';
 
@@ -404,12 +401,6 @@ const Cashier = {
       } else if (method === 'Card') {
         refGroup.style.display = 'block';
         refGroup.querySelector('label').textContent = 'Card Last 4 Digits';
-      } else if (method === 'Paystack') {
-        amountGroup.style.display = 'none';
-        paystackEmailGroup.style.display = 'block';
-        if (this.customer && this.customer.email) {
-          document.getElementById('paystack-email').value = this.customer.email;
-        }
       }
     };
   },
@@ -460,12 +451,6 @@ const Cashier = {
   async processCheckout() {
     const method = document.getElementById('payment-method').value;
     const t = this.getTotals();
-
-    if (method === 'Paystack') {
-      await this._processPaystackCheckout(t);
-      return;
-    }
-
     const amount = parseFloat(document.getElementById('payment-amount').value);
     const ref = document.getElementById('payment-ref').value.trim();
 
@@ -518,86 +503,6 @@ const Cashier = {
       this.loadProducts();
     } catch (err) {
       Toast.show('Checkout failed: ' + err.message, 'error');
-    }
-  },
-
-  async _processPaystackCheckout(t) {
-    const email = document.getElementById('paystack-email').value.trim();
-    if (!email) {
-      Toast.show('Enter a customer email for Paystack', 'warning');
-      return;
-    }
-
-    const btn = document.getElementById('btn-complete-sale');
-    btn.disabled = true;
-    btn.textContent = 'Processing...';
-
-    const cartPayload = {
-      items: this.cart.items.map(i => ({
-        productId: i.productId,
-        quantity: i.quantity,
-        discountPercent: i.discountPercent
-      })),
-      saleDiscount: this.cart.saleDiscount,
-      customerId: this.cart.customerId
-    };
-
-    let saleId;
-    try {
-      const saleData = await API.post('/api/sales/checkout', {
-        cart: cartPayload,
-        payments: [{ method: 'Paystack', amount: t.grandTotal }]
-      });
-      saleId = saleData.data.sale._id || saleData.data.sale.saleId;
-    } catch (err) {
-      Toast.show('Could not create sale: ' + err.message, 'error');
-      btn.disabled = false;
-      btn.textContent = 'Complete Sale';
-      return;
-    }
-
-    let paystackData;
-    try {
-      const initRes = await API.post('/api/paystack/initialize', {
-        amount: t.grandTotal,
-        email,
-        saleId
-      });
-      paystackData = initRes.data;
-    } catch (err) {
-      Toast.show('Paystack init failed: ' + err.message, 'error');
-      btn.disabled = false;
-      btn.textContent = 'Complete Sale';
-      return;
-    }
-
-    // Store pending payment info so we can verify after redirect
-    sessionStorage.setItem('paystack_pending', JSON.stringify({
-      reference: paystackData.reference,
-      saleId
-    }));
-
-    // Redirect to Paystack checkout page — most reliable approach
-    window.location.href = paystackData.authorizationUrl;
-  },
-
-  async checkPendingPaystackPayment() {
-    const pending = sessionStorage.getItem('paystack_pending');
-    if (!pending) return;
-
-    const { reference, saleId } = JSON.parse(pending);
-    sessionStorage.removeItem('paystack_pending');
-
-    try {
-      const verifyRes = await API.get(`/api/paystack/verify/${reference}`);
-      if (verifyRes.data.verified) {
-        Toast.show('Paystack payment confirmed!');
-        this.showReceipt(saleId);
-      } else {
-        Toast.show('Payment not confirmed. Status: ' + verifyRes.data.status, 'warning');
-      }
-    } catch (err) {
-      Toast.show('Could not verify payment: ' + err.message, 'error');
     }
   },
 

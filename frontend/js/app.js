@@ -33,11 +33,5 @@ const Router = {
 
 // Boot the app
 document.addEventListener('DOMContentLoaded', () => {
-  // Load Paystack public key
-  fetch('/api/config/paystack')
-    .then(r => r.json())
-    .then(d => { if (d.data && d.data.publicKey) window.__PAYSTACK_PUBLIC_KEY__ = d.data.publicKey; })
-    .catch(() => {});
-
   Auth.init();
 });

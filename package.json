@@ -17,14 +17,17 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "compression": "^1.8.1",
+    "connect-mongo": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "express-rate-limit": "^8.4.1",
     "express-session": "^1.18.1",
+    "helmet": "^8.1.0",
     "json2csv": "^5.0.7",
     "mongoose": "^8.9.0",
     "multer": "^2.1.1",
-    "paystack-node": "^0.3.0",
     "pdfkit": "^0.16.0"
   },
   "devDependencies": {

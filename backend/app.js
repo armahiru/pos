@@ -1,6 +1,10 @@
 const express = require('express');
 const session = require('express-session');
+const { MongoStore } = require('connect-mongo');
 const cors = require('cors');
+const helmet = require('helmet');
+const compression = require('compression');
+const rateLimit = require('express-rate-limit');
 const path = require('path');
 require('dotenv').config();
 
@@ -11,6 +15,22 @@ const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Security headers
+app.use(helmet({ contentSecurityPolicy: false }));
+
+// Gzip compression
+app.use(compression());
+
+// CORS — restrict to app origin in production
+app.use(cors({
+  origin: process.env.APP_URL || 'http://localhost:3000',
+  credentials: true
+}));
+
+// Rate limiting on auth routes — 20 attempts per 15 min
+app.use('/api/auth', rateLimit({ windowMs: 15 * 60 * 1000, max: 20, standardHeaders: true, legacyHeaders: false }));
+// General API rate limit — 300 requests per 15 min
+app.use('/api', rateLimit({ windowMs: 15 * 60 * 1000, max: 300, standardHeaders: true, legacyHeaders: false }));
 // Image upload config
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, path.join(__dirname, '..', 'uploads')),
@@ -21,23 +41,24 @@ const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 }, fileFilt
   else cb(new Error('Only images allowed'), false);
 }});
 
-// CORS
-app.use(cors());
-
 // JSON body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Session middleware
+// Session middleware — stored in MongoDB so sessions survive restarts
 app.use(
   session({
     secret: process.env.SESSION_SECRET || 'default_secret',
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+      touchAfter: 24 * 3600 // lazy session update
+    }),
     cookie: {
       maxAge: 8 * 60 * 60 * 1000, // 8 hours
       httpOnly: true,
-      secure: false
+      secure: process.env.NODE_ENV === 'production'
     }
   })
 );
@@ -54,7 +75,7 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ success: true, message: 'POS System API is running' });
+  res.json({ success: true, message: 'YGLC Shop API is running' });
 });
 
 // MoMo config for QR code
@@ -65,14 +86,6 @@ app.get('/api/config/momo', (req, res) => {
       momoNumber: process.env.MOMO_NUMBER || '',
       momoName: process.env.MOMO_NAME || 'Store'
     }
-  });
-});
-
-// Paystack public key for frontend
-app.get('/api/config/paystack', (req, res) => {
-  res.json({
-    success: true,
-    data: { publicKey: process.env.PAYSTACK_PUBLIC_KEY || '' }
   });
 });
 
@@ -88,7 +101,6 @@ app.post('/api/verify-pin', (req, res) => {
 });
 
 // Module routes
-app.use(require('./modules/payment/paystackRoutes'));
 app.use(require('./modules/auth/authRoutes'));
 app.use(require('./modules/dashboard/dashboardRoutes'));
 app.use(require('./modules/product/productRoutes'));
